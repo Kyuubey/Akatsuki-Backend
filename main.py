@@ -10,3 +10,4 @@ def handle(api):
         return importlib.import_module(f'routes.api.{api}').handle(request)
     else:
         return 'API not found.'
+
