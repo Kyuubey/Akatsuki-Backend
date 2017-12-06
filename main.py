@@ -1,17 +1,12 @@
 #!/usr/bin/python3.6
 
-import os, importlib
+from aiohttp import web
 
-from flask import Flask, request
+import routes.api.ilikethat, routes.api.eyes
 
-app = Flask(__name__)
+app = web.Application()
+app.router.add_get('/api/ilikethat', routes.api.ilikethat.handle)
+app.router.add_post('/api/eyes', routes.api.eyes.handle)
 
-@app.route('/api/<api>', methods=['POST','GET'])
-def handle(api):
-    if os.path.exists(f'./routes/api/{api}.py'):
-        return importlib.import_module(f'routes.api.{api}').handle(request)
-    else:
-        return 'API not found.'
-
-app.run(port=5050)
+web.run_app(app, port=5050)
 
