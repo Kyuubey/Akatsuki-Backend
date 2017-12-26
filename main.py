@@ -2,7 +2,7 @@
 
 from aiohttp import web
 
-import routes.api.eyes
+#import routes.api.eyes
 import routes.api.haah
 import routes.api.hooh
 import routes.api.ilikethat
@@ -11,7 +11,7 @@ import routes.api.woow
 
 app = web.Application()
 app.router.add_get('/api/ilikethat', routes.api.ilikethat.handle)
-app.router.add_post('/api/eyes', routes.api.eyes.handle)
+#app.router.add_post('/api/eyes', routes.api.eyes.handle)
 app.router.add_post('/api/haah', routes.api.haah.handle)
 app.router.add_post('/api/hooh', routes.api.hooh.handle)
 app.router.add_post('/api/waaw', routes.api.waaw.handle)
