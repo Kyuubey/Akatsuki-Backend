@@ -1,9 +1,11 @@
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 from aiohttp import web
+import os, sys
 
 async def handle(req):
-    font = ImageFont.truetype('./public/fonts/comicsans.ttf', 40)
+    path = os.path.dirname(os.path.realpath(sys.argv[0]))
+    font = ImageFont.truetype(f'{path}/public/fonts/comicsans.ttf', 40)
 
     txt = req.query['text']
 
