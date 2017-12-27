@@ -12,7 +12,7 @@ async def handle(req):
     txt_img = Image.new('RGBA', (125, 60), (0, 0, 0, 0))
     txt_draw = ImageDraw.Draw(txt_img)
 
-    im = Image.open('./public/img/ilikethat.png')
+    im = Image.open(f'{path}/public/img/ilikethat.png')
 
     txt_draw.text((0, 0), txt, fill='black', font=font, anchor='center')
 
