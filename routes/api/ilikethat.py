@@ -1,6 +1,5 @@
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
-from aiohttp import web
 import os, sys
 
 async def handle(req):
@@ -23,5 +22,5 @@ async def handle(req):
     io = BytesIO()
     im.save(io, format='PNG')
 
-    return web.Response(body=io.getvalue(), content_type='image/png', charset='UTF-8')
+    return req.Response(body=io.getvalue(), mime_type='image/png', encoding='UTF-8')
 

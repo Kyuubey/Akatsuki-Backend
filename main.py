@@ -1,6 +1,6 @@
-#!/usr/bin/python3.6
+#!/bin/env python3.6
 
-from aiohttp import web
+from japronto import Application
 
 import os
 
@@ -11,13 +11,13 @@ import routes.api.ilikethat
 import routes.api.waaw
 import routes.api.woow
 
-app = web.Application()
-app.router.add_get('/api/ilikethat', routes.api.ilikethat.handle)
+app = Application()
+app.router.add_route('/api/ilikethat', routes.api.ilikethat.handle, method="GET")
 #app.router.add_post('/api/eyes', routes.api.eyes.handle)
-app.router.add_post('/api/haah', routes.api.haah.handle)
-app.router.add_post('/api/hooh', routes.api.hooh.handle)
-app.router.add_post('/api/waaw', routes.api.waaw.handle)
-app.router.add_post('/api/woow', routes.api.woow.handle)
+app.router.add_route('/api/haah', routes.api.haah.handle, method="POST")
+app.router.add_route('/api/hooh', routes.api.hooh.handle, method="POST")
+app.router.add_route('/api/waaw', routes.api.waaw.handle, method="POST")
+app.router.add_route('/api/woow', routes.api.woow.handle, method="POST")
 
-web.run_app(app, port=int(os.environ.get('PORT')) if os.environ.get('PORT') else 5050)
+app.run(debug=True, port=int(os.environ.get('PORT')) if os.environ.get('PORT') else 5050)
 

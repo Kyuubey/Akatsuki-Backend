@@ -1,19 +1,8 @@
 from PIL import Image, ImageOps
 from io import BytesIO
-from aiohttp import web
 
 async def handle(req):
-    reader = await req.multipart()
-    post_img = await reader.next()
-    img_io = BytesIO()
-
-    while True:
-        chunk = await post_img.read_chunk()
-        if not chunk:
-            break
-        img_io.write(chunk)
-
-    im = Image.open(img_io)
+    im = Image.open(BytesIO(req.files[''].body))
     w, h = im.size
     im2 = ImageOps.mirror(im.crop((0, 0, w / 2, h)))
     
@@ -21,5 +10,5 @@ async def handle(req):
     io = BytesIO()
     im.save(io, format='PNG')
 
-    return web.Response(body=io.getvalue(), content_type='image/png', charset='UTF-8')
+    return req.Response(body=io.getvalue(), mime_type='image/png', encoding='UTF-8')
 
