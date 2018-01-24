@@ -26,7 +26,7 @@ app.router.add_route('/api/waaw', routes.api.waaw.handle, method='POST')
 app.router.add_route('/api/woow', routes.api.woow.handle, method='POST')
 app.router.add_route('/api/needsmorejpeg', routes.api.needsmorejpeg.handle, method='POST')
 app.router.add_route('/api/mirror', routes.api.mirror.handle, method='POST')
-app.router.add_route('/api/flip', routes.api.mirror.handle, method='POST')
+app.router.add_route('/api/flip', routes.api.flip.handle, method='POST')
 app.router.add_route('/api/invert', routes.api.invert.handle, method='POST')
 
 app.run(debug=True, port=int(os.environ.get('PORT')) if os.environ.get('PORT') else 5050)
