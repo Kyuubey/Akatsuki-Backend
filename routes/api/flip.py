@@ -2,7 +2,7 @@ from PIL import Image, ImageOps
 from io import BytesIO
 
 async def handle(req):
-    im = Image.open(BytesIO(req.files[''].body))
+    im = Image.open(BytesIO(req.files[list(req.files.keys())[0]].body))
 
     io = BytesIO()
     ImageOps.flip(im).save(io, format='PNG')

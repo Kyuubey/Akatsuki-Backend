@@ -2,7 +2,7 @@ from PIL import Image, ImageOps
 from io import BytesIO
 
 async def handle(req):
-    im = Image.open(BytesIO(req.files[''].body))
+    im = Image.open(BytesIO(req.files[list(req.files.keys())[0]].body))
     w, h = im.size
     im2 = ImageOps.mirror(im.crop((0, 0, w / 2, h)))
     
