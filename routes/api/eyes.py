@@ -2,7 +2,7 @@
 from io import BytesIO
 
 # External Libraries
-from PIL import Image, ImageDraw
+from PIL import Image
 from aiohttp import web
 import cv2
 import numpy
@@ -35,10 +35,10 @@ async def handle(req):
 
     for (x, y, w, h) in eyes:
         eye_cp = eye.resize((w, h), Image.ANTIALIAS)
-        im.paste(eye_cp, (int(x + (eye.width / w)), y), eye_cp)
+        img.paste(eye_cp, (int(x + (eye.width / w)), y), eye_cp)
 
     io = BytesIO()
-    im.save(io, format='PNG')
+    img.save(io, format='PNG')
 
     return web.Response(
         body=io.getvalue(), content_type='image/png', charset='UTF-8')
