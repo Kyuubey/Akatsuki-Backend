@@ -1,16 +1,17 @@
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
-from aiohttp import web
+import os, sys
 
 async def handle(req):
-    font = ImageFont.truetype('./public/fonts/comicsans.ttf', 40)
+    path = os.path.dirname(os.path.realpath(sys.argv[0]))
+    font = ImageFont.truetype(f'{path}/public/fonts/comicsans.ttf', 40)
 
     txt = req.query['text']
 
     txt_img = Image.new('RGBA', (125, 60), (0, 0, 0, 0))
     txt_draw = ImageDraw.Draw(txt_img)
 
-    im = Image.open('./public/img/ilikethat.png')
+    im = Image.open(f'{path}/public/img/ilikethat.png')
 
     txt_draw.text((0, 0), txt, fill='black', font=font, anchor='center')
 
@@ -21,5 +22,5 @@ async def handle(req):
     io = BytesIO()
     im.save(io, format='PNG')
 
-    return web.Response(body=io.getvalue(), content_type='image/png', charset='UTF-8')
+    return req.Response(body=io.getvalue(), mime_type='image/png', encoding='UTF-8')
 
