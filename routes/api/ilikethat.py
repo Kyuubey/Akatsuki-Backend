@@ -7,7 +7,7 @@ import sys
 from PIL import Image, ImageDraw, ImageFont
 
 
-async def handle(req):
+def handle(req):
     """GET"""
     path = os.path.dirname(os.path.realpath(sys.argv[0]))
     font = ImageFont.truetype(f'{path}/public/fonts/comicsans.ttf', 40)

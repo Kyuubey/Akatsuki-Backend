@@ -5,7 +5,7 @@ from io import BytesIO
 from PIL import Image, ImageOps
 
 
-async def handle(req):
+def handle(req):
     """POST"""
     im = Image.open(BytesIO(req.files[list(req.files.keys())[0]].body))
     r, g, b, _ = im.split()

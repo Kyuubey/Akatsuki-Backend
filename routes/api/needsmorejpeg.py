@@ -5,7 +5,7 @@ from io import BytesIO
 from PIL import Image
 
 
-async def handle(req):
+def handle(req):
     """POST"""
     io = BytesIO()
 
