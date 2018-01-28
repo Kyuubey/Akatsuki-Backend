@@ -1,3 +1,4 @@
-Pillow
-aiohttp
+pillow
+japronto
 opencv-python
+snekchek
