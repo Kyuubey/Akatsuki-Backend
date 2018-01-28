@@ -29,6 +29,6 @@ def find_routes(dir_):
 routes = find_routes("routes")
 
 for route, handle in routes:
-    app.router.add_route(route, handle, handle.__doc__)
+    app.router.add_route(route, handle, method=handle.__doc__.strip())
 
 app.run(debug=True, port=int(os.environ.get('PORT', 5050)))
