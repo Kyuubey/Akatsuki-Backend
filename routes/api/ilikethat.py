@@ -1,8 +1,14 @@
+# Stdlib
 from io import BytesIO
+import os
+import sys
+
+# External Libraries
 from PIL import Image, ImageDraw, ImageFont
-import os, sys
+
 
 async def handle(req):
+    """GET"""
     path = os.path.dirname(os.path.realpath(sys.argv[0]))
     font = ImageFont.truetype(f'{path}/public/fonts/comicsans.ttf', 40)
 
@@ -22,5 +28,5 @@ async def handle(req):
     io = BytesIO()
     im.save(io, format='PNG')
 
-    return req.Response(body=io.getvalue(), mime_type='image/png', encoding='UTF-8')
-
+    return req.Response(
+        body=io.getvalue(), mime_type='image/png', encoding='UTF-8')

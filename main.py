@@ -1,33 +1,34 @@
 #!/usr/bin/env python3.6
 
-from japronto import Application
-
+# Stdlib
+from importlib.util import module_from_spec, spec_from_file_location
 import os
 
-import routes.api.haah
-import routes.api.hooh
-import routes.api.ilikethat
-import routes.api.waaw
-import routes.api.woow
-import routes.api.needsmorejpeg
-import routes.api.mirror
-import routes.api.flip
-import routes.api.invert
+# External Libraries
+from japronto import Application
 
 app = Application()
 
-# GET routes
-app.router.add_route('/api/ilikethat', routes.api.ilikethat.handle, method="GET")
 
-# POST routes
-app.router.add_route('/api/haah', routes.api.haah.handle, method='POST')
-app.router.add_route('/api/hooh', routes.api.hooh.handle, method='POST')
-app.router.add_route('/api/waaw', routes.api.waaw.handle, method='POST')
-app.router.add_route('/api/woow', routes.api.woow.handle, method='POST')
-app.router.add_route('/api/needsmorejpeg', routes.api.needsmorejpeg.handle, method='POST')
-app.router.add_route('/api/mirror', routes.api.mirror.handle, method='POST')
-app.router.add_route('/api/flip', routes.api.flip.handle, method='POST')
-app.router.add_route('/api/invert', routes.api.invert.handle, method='POST')
+def find_routes(dir_):
+    data = []
+    for path, _, files in os.walk(dir_):
+        if not files:
+            continue
 
-app.run(debug=True, port=int(os.environ.get('PORT')) if os.environ.get('PORT') else 5050)
+        for file in files:
+            pathname = f"{path[len(dir_):]}/{file.strip()}"
+            spec = spec_from_file_location(file.strip()[:-3], dir_ + pathname)
+            module = module_from_spec(spec)
+            spec.loader.exec_module(module)
+            data.append((pathname[:-3], module.handle))
 
+    return data
+
+
+routes = find_routes("routes")
+
+for route, handle in routes:
+    app.router.add_route(route, handle, handle.__doc__)
+
+app.run(debug=True, port=int(os.environ.get('PORT', 5050)))

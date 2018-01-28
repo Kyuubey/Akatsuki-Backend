@@ -1,10 +1,15 @@
-import cv2, numpy
-
+# Stdlib
 from io import BytesIO
+
+# External Libraries
 from PIL import Image, ImageDraw
 from aiohttp import web
+import cv2
+import numpy
+
 
 async def handle(req):
+    """POST"""
     reader = await req.multipart()
     post_img = await reader.next()
     img_io = BytesIO()
@@ -15,12 +20,11 @@ async def handle(req):
             break
         img_io.write(chunk)
 
-    im = Image.open(img_io)
+    img = Image.open(img_io)
     eye = Image.open('./public/img/eye.png')
-    im_draw = ImageDraw.Draw(im)
 
-    face_cascade = cv2.CascadeClassifier('./public/cascades/haarcascade_frontalface_default.xml')
-    eye_cascade = cv2.CascadeClassifier('./public/cascades/haarcascade_eye.xml')
+    eye_cascade = cv2.CascadeClassifier(
+        './public/cascades/haarcascade_eye.xml')
     arr = numpy.frombuffer(img_io.getbuffer(), numpy.uint8)
     cv_img = cv2.imdecode(arr, cv2.IMREAD_COLOR)
 
@@ -28,7 +32,7 @@ async def handle(req):
 
     # faces = face_cascade.detectMultiScale(gray_cv_img)
     eyes = eye_cascade.detectMultiScale(gray_cv_img)
-    
+
     for (x, y, w, h) in eyes:
         eye_cp = eye.resize((w, h), Image.ANTIALIAS)
         im.paste(eye_cp, (int(x + (eye.width / w)), y), eye_cp)
@@ -36,5 +40,5 @@ async def handle(req):
     io = BytesIO()
     im.save(io, format='PNG')
 
-    return web.Response(body=io.getvalue(), content_type='image/png', charset='UTF-8')
-
+    return web.Response(
+        body=io.getvalue(), content_type='image/png', charset='UTF-8')
