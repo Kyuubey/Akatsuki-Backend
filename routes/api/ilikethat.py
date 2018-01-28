@@ -6,6 +6,7 @@ import sys
 # External Libraries
 from PIL import Image, ImageDraw, ImageFont
 
+import textwrap
 
 def handle(req):
     """GET"""
@@ -17,11 +18,13 @@ def handle(req):
     txt_img = Image.new('RGBA', (125, 60), (0, 0, 0, 0))
     txt_draw = ImageDraw.Draw(txt_img)
 
+    lines = textwrap.wrap(txt, width=125)
+
     im = Image.open(f'{path}/public/img/ilikethat.png')
 
-    txt_draw.text((0, 0), txt, fill='black', font=font, anchor='center')
+    txt_draw.multiline_text((0, 0), "\n".join(lines), fill='black', font=font, anchor='center')
 
-    im2 = txt_img.rotate(19, expand=1)
+    im2 = txt_img.rotate(19)
 
     im.paste(im2, (190, 160), im2)
 

@@ -11,6 +11,25 @@ from japronto import Application
 app = Application()
 
 
+class DynamicRoute:
+    def __init__(self, dir_, path):
+        self.path = path[:-3]
+        self.location = dir_ + path
+        spec = spec_from_file_location(path[:-3].split(".")[-1], dir_ + path)
+        module = module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.method = module.handle.__doc__
+        del spec, module
+
+    def run(self, req):
+        spec = spec_from_file_location(self.path[:-3].split(".")[-1], self.location)
+        module = module_from_spec(spec)
+        spec.loader.exec_module(module)
+        res = module.handle(req)
+        del module, spec
+        return res
+
+
 def static_file(path):
     async def inner(req):
         with open(path) as file:
@@ -46,10 +65,7 @@ def find_routes(dir_):
             if not file.endswith(".py"):
                 continue
             pathname = f"{path[len(dir_):]}/{file.strip()}"
-            spec = spec_from_file_location(file.strip()[:-3], dir_ + pathname)
-            module = module_from_spec(spec)
-            spec.loader.exec_module(module)
-            data.append((pathname[:-3], module.handle))
+            data.append(DynamicRoute(dir_, pathname))
 
     return data
 
@@ -57,8 +73,8 @@ def find_routes(dir_):
 routes = find_routes("routes")
 static = find_static_files("static")
 
-for route, handle in routes:
-    app.router.add_route(route, handle, method=handle.__doc__.strip())
+for route in routes:
+    app.router.add_route(route.path, route.run, method=route.method)
 
 for route, handle in static:
     app.router.add_route(route, handle, method="GET")
