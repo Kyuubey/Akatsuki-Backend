@@ -2,8 +2,8 @@
 
 # Stdlib
 from importlib.util import module_from_spec, spec_from_file_location
-import os
 import mimetypes
+import os
 
 # External Libraries
 from japronto import Application
@@ -14,7 +14,8 @@ app = Application()
 def static_file(path):
     async def inner(req):
         with open(path) as file:
-            return req.Response(file.read(), mime_type=mimetypes.guess_type(path)[0])
+            return req.Response(
+                file.read(), mime_type=mimetypes.guess_type(path)[0])
 
     return inner
 

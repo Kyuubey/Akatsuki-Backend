@@ -23,12 +23,12 @@ async def handle(req):
     img = Image.open(img_io)
     eye = Image.open('./public/img/eye.png')
 
-    eye_cascade = cv2.CascadeClassifier(
+    eye_cascade = cv2.CascadeClassifier(  # pylint: disable=no-member
         './public/cascades/haarcascade_eye.xml')
     arr = numpy.frombuffer(img_io.getbuffer(), numpy.uint8)
-    cv_img = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+    cv_img = cv2.imdecode(arr, cv2.IMREAD_COLOR)  # pylint: disable=no-member
 
-    gray_cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
+    gray_cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)  # pylint: disable=no-member
 
     # faces = face_cascade.detectMultiScale(gray_cv_img)
     eyes = eye_cascade.detectMultiScale(gray_cv_img)
