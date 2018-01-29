@@ -2,11 +2,11 @@
 from io import BytesIO
 import os
 import sys
+import textwrap
 
 # External Libraries
 from PIL import Image, ImageDraw, ImageFont
 
-import textwrap
 
 def handle(req):
     """GET"""
@@ -22,7 +22,8 @@ def handle(req):
 
     im = Image.open(f'{path}/public/img/ilikethat.png')
 
-    txt_draw.multiline_text((0, 0), "\n".join(lines), fill='black', font=font, anchor='center')
+    txt_draw.multiline_text(
+        (0, 0), "\n".join(lines), fill='black', font=font, anchor='center')
 
     im2 = txt_img.rotate(19)
 

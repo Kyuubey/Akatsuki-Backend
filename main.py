@@ -12,7 +12,8 @@ app = Application()
 
 
 class DynamicRoute:
-    def __init__(self, dir_: str, path: str):  # type: (DynamicRoute, str, str) -> None
+    def __init__(self, dir_: str,
+                 path: str):  # type: (DynamicRoute, str, str) -> None
         self.path = path[:-3]
         self.location = dir_ + path
         spec = spec_from_file_location(path[:-3].split(".")[-1], dir_ + path)
@@ -21,8 +22,10 @@ class DynamicRoute:
         self.method = module.handle.__doc__
         del spec, module
 
-    def run(self, req):  # type: (DynamicRoute, japronto.Request) -> japronto.Response
-        spec = spec_from_file_location(self.path[:-3].split(".")[-1], self.location)
+    def run(self, req
+            ):  # type: (DynamicRoute, japronto.Request) -> japronto.Response
+        spec = spec_from_file_location(self.path[:-3].split(".")[-1],
+                                       self.location)
         module = module_from_spec(spec)
         spec.loader.exec_module(module)
         res = module.handle(req)
