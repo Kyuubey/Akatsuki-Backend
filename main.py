@@ -12,7 +12,7 @@ app = Application()
 
 
 class DynamicRoute:
-    def __init__(self, dir_, path):
+    def __init__(self, dir_: str, path: str):  # type: (DynamicRoute, str, str) -> None
         self.path = path[:-3]
         self.location = dir_ + path
         spec = spec_from_file_location(path[:-3].split(".")[-1], dir_ + path)
@@ -21,7 +21,7 @@ class DynamicRoute:
         self.method = module.handle.__doc__
         del spec, module
 
-    def run(self, req):
+    def run(self, req):  # type: (DynamicRoute, japronto.Request) -> japronto.Response
         spec = spec_from_file_location(self.path[:-3].split(".")[-1], self.location)
         module = module_from_spec(spec)
         spec.loader.exec_module(module)
@@ -30,8 +30,8 @@ class DynamicRoute:
         return res
 
 
-def static_file(path):
-    async def inner(req):
+def static_file(path: str):  # type: (str) -> (req: {Response}) -> Coroutine
+    async def inner(req):  # type: ({Response}) -> Coroutine
         with open(path) as file:
             return req.Response(
                 file.read(), mime_type=mimetypes.guess_type(path)[0])
@@ -39,7 +39,7 @@ def static_file(path):
     return inner
 
 
-def find_static_files(dir_):
+def find_static_files(dir_: str) -> list:  # type: (str) -> List[str]
     data = []
     for path, _, files in os.walk(dir_):
         if not files:
@@ -55,7 +55,7 @@ def find_static_files(dir_):
     return data
 
 
-def find_routes(dir_):
+def find_routes(dir_: str) -> list:  # type: (str) -> List[str]
     data = []
     for path, _, files in os.walk(dir_):
         if not files:
