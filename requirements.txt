@@ -1,6 +1,2 @@
 pillow
-numpy
-aiohttp
-opencv-python
-snekchek
 git+https://github.com/squeaky-pl/japronto
