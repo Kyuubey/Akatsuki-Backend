@@ -7,12 +7,10 @@ from PIL import Image, ImageOps
 
 def handle(req):
     """POST"""
-    im = Image.open(BytesIO(req.files[list(req.files.keys())[0]].body))
-    r, g, b, _ = im.split()
-    rgb_im = Image.merge("RGB", (r, g, b))
+    im = Image.open(BytesIO(req.files[list(req.files.keys())[0]].body)).convert('RGB')
 
     io = BytesIO()
-    ImageOps.invert(rgb_im).save(io, format='PNG')
+    ImageOps.invert(im).save(io, format='PNG')
 
     return req.Response(
         body=io.getvalue(), mime_type='image/png', encoding='UTF-8')
