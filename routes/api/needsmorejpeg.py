@@ -9,12 +9,14 @@ def handle(req):
     """POST"""
     io = BytesIO()
 
-    im = Image.open(BytesIO(req.files[list(req.files.keys())[0]].body))
-    r, g, b, _ = im.split()
+    im = Image.open(
+            BytesIO(req.files[list(req.files.keys())[0]].body)).convert('RGB')
 
-    rgb_im = Image.merge("RGB", (r, g, b))
-
-    rgb_im.save(io, 'JPEG', quality=1)
+    # if im.mode == 'RGBA':
+    #     r, g, b, _ = im.split()
+    #     Image.merge("RGB", (r, g, b)).save(io, 'JPEG', quality=1)
+    # else:
+    im.save(io, 'JPEG', quality=1)
 
     return req.Response(
         body=io.getvalue(), mime_type='image/jpeg', encoding='UTF-8')
