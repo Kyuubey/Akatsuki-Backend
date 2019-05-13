@@ -1,4 +1,4 @@
-FROM python:alpine
+FROM python:3.6-alpine
 WORKDIR /usr/src/backend
 COPY . /usr/src/backend
 RUN apk update && \
